@@ -24,4 +24,4 @@ function pcg(A::Matrix{T}, b::Vector{T}, x₀::Vector{T},e::Float64=1e-5) where 
         d₀ = d
     end
     x₀
-end  # function pcg
+end
