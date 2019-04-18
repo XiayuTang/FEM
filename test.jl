@@ -13,4 +13,5 @@ function main()
     α = a*A
     β = b*B
     α * β
+    nothing
 end
