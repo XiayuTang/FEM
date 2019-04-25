@@ -17,6 +17,6 @@ using LinearSystem
 #     α * β
 #     nothing
 # end
-a = [1.0 0.0; 0.0 1.0];
-b = [1.0;2.0];
+a = [1 0; 0 1];
+b = [1;2];
 pcg(a,b,zeros(2))

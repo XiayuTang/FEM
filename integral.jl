@@ -1,3 +1,5 @@
+module Integral 
+export trapezoid,simpson
 """
 梯形求积公式
 """
@@ -12,8 +14,9 @@ function simpson(f::Function, a::Real, b::Real)
     (f(a)+4*f(c)+f(b))*(b-a)/3
 end
 
+end  # end Module
 
+# f(x) = sin(x)
+# trapezoid(f,0,0.5)
+# simpson(f,0,0.5)
 
-f(x) = sin(x)
-trapezoid(f,0,0.5)
-simpson(f,0,0.5)
