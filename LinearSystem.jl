@@ -3,15 +3,17 @@ export gauss_seidel, cg, jacobi, pcg
 
 using LinearAlgebra
 
-IntOrFloatVec = Union{Vector{Int8},Vector{Int16},Vector{Int32},Vector{Int64},Vector{Int128},Vector{Float16},Vector{Float32},Vector{Float64}}
-IntOrFloatMat = Union{Matrix{Int8},Matrix{Int16},Matrix{Int32},Matrix{Int64},Matrix{Int128},Matrix{Float16},Matrix{Float32},Matrix{Float64}}
+# V = Union{Vector{Int8},Vector{Int16},Vector{Int32},Vector{Int64},Vector{Int128},Vector{Float16},Vector{Float32},Vector{Float64}}
+# M = Union{Matrix{Int8},Matrix{Int16},Matrix{Int32},Matrix{Int64},Matrix{Int128},Matrix{Float16},Matrix{Float32},Matrix{Float64}}
+M = AbstractMatrix{<:Real}
+V = AbstractVector{<:Real}
 
 """
     isrowzero(A)
 
 判断矩阵A的每一行是否全为零
 """
-function isrowzero(A::IntOrFloatMat)
+function isrowzero(A::M)
     n = size(A,1)
     o = zeros(eltype(A),n)
     for i in 1:n
@@ -28,7 +30,7 @@ end
 
 判断矩阵A的每一列是否全为零
 """
-function iscolzero(A::IntOrFloatMat)
+function iscolzero(A::M)
     n = size(A,2)
     o = zeros(eltype(A),n)
     for i ∈ 1:n
@@ -46,7 +48,7 @@ end
 若矩阵A的对角元的某几个为0，
 则通过初等行变换将0转换为非零元素
 """
-function diagchange!(A::IntOrFloatMat)
+function diagchange!(A::M)
     m,n = size(A)
     @assert m == n  # 要求 A为方阵
     @assert !isrowzero(A)
@@ -80,7 +82,7 @@ Jacobi迭代法求解线性方程组 ``Ax = b``
 - `x`  方程组的近似解
 - `n`  迭代次数
 """
-function jacobi(A::IntOrFloatMat,b::IntOrFloatVec,x⁰::IntOrFloatVec,ϵ::Float64=1e-5,maxiter::Int=100) 
+function jacobi(A::M,b::V,x⁰::V,ϵ::Float64=1e-5,maxiter::Int=100) 
     diagchange!(A)
     n = 0
     D = Diagonal(diag(A))
@@ -116,7 +118,7 @@ Gauss-Seidel迭代法求解线性方程组 ``Ax = b``
 - `n`  迭代次数
 """
 
-function gauss_seidel(A::IntOrFloatMat, b::IntOrFloatVec, x⁰::IntOrFloatVec, ϵ::Float64=1e-5,maxiter::Int=100)
+function gauss_seidel(A::M, b::V, x⁰::V, ϵ::Float64=1e-5,maxiter::Int=100)
     diagchange!(A)
     n = 0
     L = tril(A)
@@ -146,7 +148,7 @@ end
 - `x₀` 迭代初值
 - `e` 允许最大误差
 """
-function cg(A::IntOrFloatMat, b::IntOrFloatVec, x₀::IntOrFloatVec, e::Float64=1e-5)
+function cg(A::M, b::V, x₀::V, e::Float64=1e-5)
     @assert isposdef(A)  # 判断 A 是否为对称正定矩阵
     n = size(A, 1)
     @assert n == length(b) == length(x₀)  # 维度匹配
@@ -178,7 +180,7 @@ end
 - `x₀` 迭代初值
 - `e` 允许最大误差
 """
-function pcg(A::IntOrFloatMat, b::IntOrFloatVec, x₀::IntOrFloatVec,e::Float64=1e-5)
+function pcg(A::M, b::V, x₀::V,e::Float64=1e-5)
     @assert isposdef(A)
     n = size(A, 1)
     @assert n == length(b) == length(x₀)
